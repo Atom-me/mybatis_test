@@ -1,0 +1,6 @@
+CREATE TABLE `test_user2` (
+  `id` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  `age` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
