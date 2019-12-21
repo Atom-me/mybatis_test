@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sarming.mybatis_test.persistence.UserMapper">
+
+    <resultMap id="userResultMap" type="User">
+        <result column="create_time" property="createTime" typeHandler="com.sarming.mybatis_test.typeHandler.MyDateTypeHandler"/>
+        <result column="hobby" property="hobby" typeHandler="com.sarming.mybatis_test.typeHandler.MyListTypeHandler"/>
+    </resultMap>
+
+
+    <insert id="insertUser" parameterType="User">
+        insert into test_user(name,age) values(#{name},#{age})
+    </insert>
+
+    <select id="getUserByName" resultType="User" parameterType="java.lang.String" resultMap="userResultMap">
+        select * from test_user where name=#{name}
+    </select>
+
+    <select id="findUserByNameAndAge" resultType="User" >
+        select * from test_user u where u.name = #{name} and u.age = #{age}
+    </select>
+
+
+    <select id="findByEndWith" resultType="User" >
+        select * from test_user u
+         where 1=1
+         <!--<if test='test.contains("m")'>
+             and u.name  like concat("%",#{name},"%")
+         </if>-->
+        <if test='test.endsWith("e")'>
+            and u.name  like concat("%",#{name},"%")
+        </if>
+    </select>
+
+
+    <insert id="insertWithCreateTime" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into test_user(name,age,create_time) values(#{name},#{age},#{createTime,typeHandler=com.sarming.mybatis_test.typeHandler.MyDateTypeHandler})
+    </insert>
+
+    <insert id="insertWithList2String" parameterType="User">
+        insert into test_user(name,age,create_time,hobby) values(#{name},#{age},#{createTime,typeHandler=com.sarming.mybatis_test.typeHandler.MyDateTypeHandler},#{hobby,javaType=List,jdbcType=VARCHAR,typeHandler=com.sarming.mybatis_test.typeHandler.MyListTypeHandler})
+    </insert>
+</mapper>

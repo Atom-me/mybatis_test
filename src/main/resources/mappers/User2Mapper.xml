@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sarming.mybatis_test.persistence.User2Mapper">
+
+
+    <insert id="insertUser" parameterType="User">
+        insert into test_user2(name,age) values(#{name},#{age})
+    </insert>
+
+    <select id="getUserByName" resultType="User2" parameterType="java.lang.String" >
+        select * from test_user2 where name=#{name}
+    </select>
+
+    <select id="findUserByNameAndAge" resultType="User2" >
+        select * from test_user2 u where u.name = #{name} and u.age = #{age}
+    </select>
+
+
+    <select id="findByEndWith" resultType="User2" >
+        select * from test_user2 u
+         where 1=1
+         <!--<if test='test.contains("m")'>
+             and u.name  like concat("%",#{name},"%")
+         </if>-->
+        <if test='test.endsWith("e")'>
+            and u.name  like concat("%",#{name},"%")
+        </if>
+    </select>
+
+    <insert id="insertWithCreateTime" parameterType="User2" >
+        insert into test_user2(id,name,age) values(#{id},#{name},#{age})
+        <selectKey keyProperty="id" resultType="string" keyColumn="id" order="BEFORE">
+            select uuid();
+        </selectKey>
+    </insert>
+
+
+</mapper>
