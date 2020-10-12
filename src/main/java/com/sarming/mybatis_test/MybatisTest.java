@@ -27,10 +27,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class MybatisTest {
 
@@ -42,16 +39,18 @@ public class MybatisTest {
         Reader resourceAsReader = Resources.getResourceAsReader(resource);
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsReader);
         Configuration configuration = sqlSessionFactory.getConfiguration();
-        configuration.getTypeAliasRegistry().getTypeAliases().forEach((k, v) -> System.err.println(k + "::" + v.getName()));
 
 
-        System.out.println("====================================================");
+//        configuration.getTypeAliasRegistry().getTypeAliases().forEach((k, v) -> System.err.println(k + "::" + v.getName()));
+
+
+//        System.out.println("====================================================");
         boolean autoCommit = configuration.getEnvironment().getDataSource().getConnection().getAutoCommit();
         String environmentId = configuration.getEnvironment().getId();
-        System.err.println("environmentId:" + environmentId);
-        System.err.println("autoCommit:" + autoCommit);
-        System.out.println("====================================================");
-//        configuration.addInterceptor(new MyPlugin());
+//        System.err.println("environmentId:" + environmentId);
+//        System.err.println("autoCommit:" + autoCommit);
+//        System.out.println("====================================================");
+        configuration.addInterceptor(new MyPlugin());
 //        configuration.addInterceptor(new SqlInterceptor());
         configuration.getTypeHandlerRegistry().register("com.sarming.mybatis_test.typeHandler");
 
@@ -106,7 +105,7 @@ public class MybatisTest {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         User user = new User();
         user.setName("sarming");
-        user.setAge(20);
+        user.setAge(new Random().nextInt(50));
         user.setCreateTime(new Date());
         user.setHobby(new ArrayList<String>() {
             {
@@ -128,7 +127,7 @@ public class MybatisTest {
         User2Mapper mapper = sqlSession.getMapper(User2Mapper.class);
         User2 user = new User2();
         user.setName("Atom");
-        user.setAge(21);
+        user.setAge(new Random().nextInt(50));
         int i = mapper.insertWithCreateTime(user);
         System.out.println("==============iiiiiiiiii===========>" + i);
         System.out.println("==============getUUID ===========>" + user.getId());
